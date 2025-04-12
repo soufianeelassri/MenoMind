@@ -1,0 +1,17 @@
+requests
+selenium
+unstructured[all]
+pillow
+python-magic-bin
+transformers
+torch
+accelerate
+python-dotenv
+langchain
+langchain-community
+langchain-chroma
+langchain-huggingface
+langchain-google-genai
+sentence-transformers
+hf_xet
+chainlit
