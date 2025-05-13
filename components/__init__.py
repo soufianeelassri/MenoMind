@@ -1,0 +1,3 @@
+"""
+MenoMind Components Package
+"""

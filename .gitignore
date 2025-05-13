@@ -1,0 +1,18 @@
+# Python cache files
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# IDE/editor folders
+.vscode/
+
+# Ignore all files in the data folder
+data/pdfs/*
+
+# Ignore all files in the output folder
+output/*
