@@ -12,7 +12,7 @@ def load_css_styles():
         /* Remove blank space at top and bottom */ 
         .block-container {
             padding-top: 3rem;
-            padding-bottom: 0rem;
+            padding-bottom: 5rem;
         }
         
         /* Main content styling */
@@ -139,22 +139,46 @@ def load_css_styles():
         .resource-card:hover {
             transform: translateY(-5px);
         }
-        
+
+        /* Basic fixed chat input */
+        .stChatInput {
+            position: fixed;
+            bottom: 2.5rem;
+            left: calc(50% + 110px);
+            transform: translateX(-50%);
+            width: min(800px, calc(100% - 400px));
+            background-color: white;
+            z-index: 999;
+            margin: 0 auto;
+        }
+
+        /* When sidebar is collapsed */
+        [data-testid="stSidebar"][aria-expanded="false"] ~ .main .stChatInput {
+            left: 50%;
+            width: min(800px, calc(100% - 100px));
+        }
+
         /* Footer styling */
         .fixed-bottom-warning {
             position: fixed;
-            background-color: #f8f2f6;
-            border: 1px solid black;
+            background-color: white;
             bottom: 0;
-            left: 0;
+            left: calc(50% + 110px);
+            transform: translateX(-50%);
             width: 100%;
-            padding: 10px;
-            margin-left: 120px;
+            padding: 9px;
+            margin: 0 auto !important;
             text-align: center;
             font-size: 10px;
             font-weight: 600;
             font-family: "Dancing Script", cursive;
-            z-index: 1000;
+            z-index: 998;
+        }
+
+        /* When sidebar is collapsed - adjust footer */
+        [data-testid="stSidebar"][aria-expanded="false"] ~ .main .fixed-bottom-warning {
+            left: 50%;
+            width: min(800px, calc(100% - 100px));
         }
     </style>
     """
