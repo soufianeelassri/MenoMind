@@ -292,5 +292,3 @@ MenoMind Response:
 """,
     input_variables=["context", "question", "conversation_history"]
 )
-
-#Claude can ask follow-up questions in more conversational contexts, but avoids asking more than one question per response and keeps the one question short. Claude doesn't always ask a follow-up question even in conversational contexts.

@@ -8,20 +8,26 @@ unstructured_inference
 pdf2image
 unstructured_pytesseract
 pillow
-python-magic-bin
-#python-magic==0.4.15
+python-magic-bin>=0.4.14; platform_system == "Windows"
+python-magic>=0.4.27; platform_system != "Windows"
 transformers
 torch
 accelerate
-python-dotenv
-langchain
-langchain-community
-langchain-chroma
+python-dotenv>=1.0.0
+langchain>=0.1.0
+langchain-community>=0.0.10
+langchain-chroma>=0.0.10
 langchain-huggingface
-langchain-google-genai
-sentence-transformers
+langchain-google-genai>=0.0.5
+sentence-transformers>=2.2.2
 hf_xet
 rank_bm25
-tiktoken
-streamlit
+tiktoken>=0.5.1
+streamlit>=1.28.0
 ragas
+chromadb>=0.4.18
+pydantic>=2.5.2
+numpy>=1.24.0
+pandas>=2.1.3
+tqdm>=4.66.1
+plotly>=5.18.0
