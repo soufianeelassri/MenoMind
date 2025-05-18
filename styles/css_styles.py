@@ -12,9 +12,23 @@ def load_css_styles():
         /* Remove blank space at top and bottom */ 
         .block-container {
             padding-top: 3rem;
-            padding-bottom: 5rem;
+            padding-bottom: 7rem !important;
+            overflow-y: auto;
         }
-        
+
+        /* Create a gradient fade effect for text near the input */
+        .main .block-container::after {
+            content: "";
+            position: fixed;
+            bottom: 5rem;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, white);
+            pointer-events: none;
+            z-index: 99;
+        }
+
         /* Main content styling */
         .main-content {
             background-color: #fcf7fa;
@@ -166,7 +180,7 @@ def load_css_styles():
             left: calc(50% + 110px);
             transform: translateX(-50%);
             width: 100%;
-            padding: 9px;
+            padding: 15px;
             margin: 0 auto !important;
             text-align: center;
             font-size: 10px;
@@ -178,7 +192,12 @@ def load_css_styles():
         /* When sidebar is collapsed - adjust footer */
         [data-testid="stSidebar"][aria-expanded="false"] ~ .main .fixed-bottom-warning {
             left: 50%;
-            width: min(800px, calc(100% - 100px));
+        }
+
+        /* Ensure chat messages container scrolls properly */
+        [data-testid="stChatMessageContainer"] {
+            overflow-y: auto;
+            padding-bottom: 2rem;
         }
     </style>
     """
