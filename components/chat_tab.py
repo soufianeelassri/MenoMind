@@ -29,21 +29,24 @@ def render_chat_tab(common_questions, resources, classify_query, retrieve_contex
     st.markdown("""
     <h4 style='font-family: "Dancing Script", cursive;'>Quick Questions</h4>
     """, unsafe_allow_html=True)
+
+    # Handle quick question selection via session state
+    if "selected_question" not in st.session_state:
+        st.session_state.selected_question = None
+
     quick_questions_html = "".join([
-        f"""<span class="quick-question" onclick="
-            document.querySelector('.stTextInput input').value = '{q}';
-            document.querySelector('.stTextInput input').dispatchEvent(new Event('input', {{ bubbles: true }}));
-        ">{q}</span>"""
+        f"""<div class="quick-question" onclick="
+            parent.postMessage({{command: 'streamlit:setComponentValue', key: 'selected_question', value: '{q.replace("'", "\\'")}'}}, '*');
+        ">{q}</div>"""
         for q in common_questions
     ])
-    st.markdown(f'<div>{quick_questions_html}</div>', unsafe_allow_html=True)
-    
+    st.markdown(f'<div class="quick-questions-container">{quick_questions_html}</div>', unsafe_allow_html=True)
+
     # Create a column layout to constrain chat content
     chat_col1, _ = st.columns([1, 3])
         
-    # Only display messages from history BEFORE the current interaction
-    # This prevents duplicates since we're handling current messages separately
-    for _, msg_data in enumerate(st.session_state.messages[:-2]):  # Skip the most recent pair of messages
+    # Display all messages from history
+    for msg_data in st.session_state.messages:
         role = msg_data["role"]
         avatar = user_avatar if role == "user" else assistant_avatar
             
@@ -92,11 +95,11 @@ def render_chat_tab(common_questions, resources, classify_query, retrieve_contex
             conversation_history=conversation_history_str
         )
 
-        # Display user message (only once)
+        # Display user message
         with st.chat_message("user", avatar=user_avatar):
             st.markdown(f"<div style='font-size: 14px;'>{user_input}</div>", unsafe_allow_html=True)
             
-        # Add to messages only after displaying
+        # Add to messages
         st.session_state.messages.append({"role": "user", "content": user_input})
         
         # Stream the assistant response
