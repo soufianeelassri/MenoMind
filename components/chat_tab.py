@@ -8,8 +8,9 @@ from datetime import datetime
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 from utils.helpers import format_chat_history_for_prompt
+from config import DEFAULT_RERANKING_ENABLED, DEFAULT_REPACKING_ENABLED, DEFAULT_REPACKING_METHOD
 
-def render_chat_tab(common_questions, resources, classify_query, retrieve_context):
+def render_chat_tab(resources, classify_query, retrieve_context):
     """
     Renders the chat tab with message history and input
     
@@ -25,25 +26,37 @@ def render_chat_tab(common_questions, resources, classify_query, retrieve_contex
     user_avatar = "👩‍🦰"
     assistant_avatar = "🌸"
     
-    # Quick question suggestions
-    st.markdown("""
-    <h4 style='font-family: "Dancing Script", cursive;'>Quick Questions</h4>
-    """, unsafe_allow_html=True)
+    # Add retrieval settings to session state if not present
+    if "use_reranking" not in st.session_state:
+        st.session_state.use_reranking = DEFAULT_RERANKING_ENABLED
+    if "use_repacking" not in st.session_state:
+        st.session_state.use_repacking = DEFAULT_REPACKING_ENABLED
+    if "repacking_method" not in st.session_state:
+        st.session_state.repacking_method = DEFAULT_REPACKING_METHOD
 
-    # Handle quick question selection via session state
-    if "selected_question" not in st.session_state:
-        st.session_state.selected_question = None
-
-    quick_questions_html = "".join([
-        f"""<div class="quick-question" onclick="
-            parent.postMessage({{command: 'streamlit:setComponentValue', key: 'selected_question', value: '{q.replace("'", "\\'")}'}}, '*');
-        ">{q}</div>"""
-        for q in common_questions
-    ])
-    st.markdown(f'<div class="quick-questions-container">{quick_questions_html}</div>', unsafe_allow_html=True)
-
-    # Create a column layout to constrain chat content
-    chat_col1, _ = st.columns([1, 3])
+    # Create a main content area
+    main_container = st.container()
+    
+    # Add retrieval settings in a row
+    settings_cols = st.columns(4)
+    
+    with settings_cols[0]:
+        st.markdown("""<h4 style='font-family: "Dancing Script", cursive;'>
+                    Retrieval Settings
+                    </h4>""", unsafe_allow_html=True)
+    
+    with settings_cols[1]:
+        st.toggle("Use Reranking", key="use_reranking", 
+                help="Reranking improves retrieval quality by reordering results using a cross-encoder model")
+    
+    with settings_cols[2]:
+        st.toggle("Use Document Repacking", key="use_repacking",
+                help="Repacking groups similar documents together for better context")
+                
+    with settings_cols[3]:
+        if st.session_state.use_repacking:
+            st.selectbox("Repacking Method", ["similarity", "token_limit"], key="repacking_method",
+                        help="Similarity: Group by semantic similarity, Token Limit: Group by token count")
         
     # Display all messages from history
     for msg_data in st.session_state.messages:
@@ -63,12 +76,30 @@ def render_chat_tab(common_questions, resources, classify_query, retrieve_contex
     
     @st.cache_data(show_spinner=False)
     def _classify_query(_query, _llm_instance):
-        return classify_query(_query, _llm_instance)
+        try:
+            return classify_query(_query, _llm_instance)
+        except Exception as e:
+            print(f"Error in query classification: {e}")
+            # Default to True if classification fails
+            return True
 
-    @st.cache_data(show_spinner=False)
-    def _retrieve_context(_query, _vectorstore_instance):
-        docs = retrieve_context(_query, _vectorstore_instance)
-        return "\n\n".join(doc.page_content for doc in docs[:10])
+    @st.cache_data(show_spinner=False, ttl=600)
+    def _retrieve_context(_query, _vectorstore_instance, use_reranking, use_repacking, repacking_method):
+        try:
+            docs = retrieve_context(
+                _query, 
+                _vectorstore_instance, 
+                use_reranking=use_reranking,
+                use_repacking=use_repacking,
+                repacking_method=repacking_method
+            )
+            if docs:
+                return "\n\n".join(doc.page_content for doc in docs[:10])
+            else:
+                return ""
+        except Exception as e:
+            print(f"Error retrieving context: {e}")
+            return ""
     
     # Input box for user questions
     user_input = st.chat_input("Ask questions about menopause, symptoms, treatments, lifestyle changes, or emotional support.")
@@ -84,10 +115,21 @@ def render_chat_tab(common_questions, resources, classify_query, retrieve_contex
         start_time = datetime.now()
         conversation_history_str = format_chat_history_for_prompt(st.session_state.chat_history)
 
-        if _classify_query(user_input, llm):
-            context = _retrieve_context(user_input, vectorstore)
-        else:
-            context = ""
+        try:
+            needs_retrieval = _classify_query(user_input, llm)
+        except Exception as e:
+            needs_retrieval = False
+            print(f"Error checking if query needs retrieval: {e}")
+
+        context = ""
+        if needs_retrieval:
+            context = _retrieve_context(
+                user_input, 
+                vectorstore,
+                st.session_state.use_reranking,
+                st.session_state.use_repacking,
+                st.session_state.repacking_method
+            )
 
         final_prompt = answer_prompt_template.format(
             context=context,
@@ -152,11 +194,10 @@ def render_chat_tab(common_questions, resources, classify_query, retrieve_contex
 
         gc.collect()
         
-    with chat_col1:    
-        # Chat Footer with disclaimer
-        st.markdown("""
-            <div class="fixed-bottom-warning"">
-                ⚠️ MenoMind is an educational tool and not a substitute for professional medical advice.
-                Always consult with a healthcare provider for medical concerns.
-            </div>
-        """, unsafe_allow_html=True)
+    # Chat Footer with disclaimer
+    st.markdown("""
+        <div class="fixed-bottom-warning"">
+            ⚠️ MenoMind is an educational tool and not a substitute for professional medical advice.
+            Always consult with a healthcare provider for medical concerns.
+        </div>
+    """, unsafe_allow_html=True)

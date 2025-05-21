@@ -119,66 +119,6 @@ def load_css_styles():
             color: white !important;
         }
         
-        /* Quick question chips */
-        .quick-questions-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin: 10px 0;
-        }
-        
-        .quick-question {
-            display: inline-block;
-            background-color: #f8f2f6;
-            border: 1px solid #000000;
-            border-radius: 20px;
-            padding: 8px 16px;
-            margin: 5px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-        }
-        
-        .quick-question:hover {
-            background-color: #ffcce6;
-            transform: translateY(-1px);
-        }
-        
-        .quick-question:active {
-            transform: translateY(0px);
-        }
-        
-        /* Styling for st.button to look like quick-questions */
-        .quick-questions-container-st div[data-testid="stButton"] > button {
-            display: inline-block;
-            background-color: #f8f2f6;
-            border: 1px solid #000000;
-            border-radius: 20px;
-            padding: 8px 16px;
-            margin: 5px;
-            font-size: 0.85rem;
-            color: black;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: auto;
-        }
-        .quick-questions-container-st div[data-testid="stButton"] > button:hover {
-            background-color: #ffcce6;
-            border-color: #000000;
-            color: black;
-            transform: translateY(-1px);
-        }
-        .quick-questions-container-st div[data-testid="stButton"] > button:active {
-            transform: translateY(0px);
-        }
-        .quick-questions-container-st {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0px;
-            margin: 10px 0;
-        }
-        
         /* Resource card styling */
         .resource-card {
             background-color: white;

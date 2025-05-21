@@ -4,6 +4,8 @@ Renders the resources tab with helpful information cards
 """
 
 import streamlit as st
+import random
+from datetime import datetime
 
 def render_resources_tab(resource_images):
     """
@@ -27,6 +29,9 @@ def render_resources_tab(resource_images):
                     <li>Practice paced breathing techniques</li>
                     <li>Identify and avoid personal triggers</li>
                 </ul>
+                <a href="https://www.menopause.org/for-women/menopause-flashes/menopause-symptoms-and-treatments/managing-hot-flashes" target="_blank" style="display:inline-block; margin-top:10px; color:#ff6b6b; text-decoration:none;">
+                    Learn more about managing hot flashes →
+                </a>
             </div>
         """, unsafe_allow_html=True)
         
@@ -41,6 +46,9 @@ def render_resources_tab(resource_images):
                     <li>Limit caffeine and alcohol before bedtime</li>
                     <li>Consider cognitive behavioral therapy for insomnia</li>
                 </ul>
+                <a href="https://www.sleepfoundation.org/women-sleep/menopause-and-sleep" target="_blank" style="display:inline-block; margin-top:10px; color:#ff6b6b; text-decoration:none;">
+                    Read sleep strategies for menopause →
+                </a>
             </div>
         """, unsafe_allow_html=True)
     
@@ -56,6 +64,9 @@ def render_resources_tab(resource_images):
                     <li>Choose complex carbohydrates over simple sugars</li>
                     <li>Stay well hydrated throughout the day</li>
                 </ul>
+                <a href="https://www.eatright.org/health/wellness/healthful-habits/eating-right-during-menopause" target="_blank" style="display:inline-block; margin-top:10px; color:#ff6b6b; text-decoration:none;">
+                    Explore menopause nutrition guides →
+                </a>
             </div>
         """, unsafe_allow_html=True)
         
@@ -70,5 +81,8 @@ def render_resources_tab(resource_images):
                     <li>Consider speaking with a therapist familiar with menopause</li>
                     <li>Explore stress reduction techniques that work for you</li>
                 </ul>
+                <a href="https://www.menopause.org/for-women/menopause-flashes/menopause-symptoms-and-treatments/depression-mood-swings-anxiety" target="_blank" style="display:inline-block; margin-top:10px; color:#ff6b6b; text-decoration:none;">
+                    Learn about emotional support resources →
+                </a>
             </div>
         """, unsafe_allow_html=True)

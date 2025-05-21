@@ -16,6 +16,7 @@ def render_sidebar(wellness_tips, menopause_stages, reset_callback):
         reset_callback (function): Callback function to reset the chat
     """
     with st.sidebar:
+        
         # About section
         st.markdown("""
         <h4 style='font-family: "Dancing Script", cursive;'>About MenoMind</h4>
@@ -36,27 +37,7 @@ def render_sidebar(wellness_tips, menopause_stages, reset_callback):
                     <p style='font-size: 0.9rem;'>{description}</p>
                 </div>
             """, unsafe_allow_html=True)
-        
-        # Daily wellness tip
-        st.markdown("""
-        <h4 style='font-family: "Dancing Script", cursive;'>Wellness Tip of the Day</h4>
-        """, unsafe_allow_html=True)
-        daily_tip = random.choice(wellness_tips)
-        st.markdown(f"""
-            <div class="info-card" style='background-color: #f0fff4; border: 1px solid #72e897; border-left-color: #72e897; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);'>
-                <h4 style='color: #28a745; margin-top: 0;'>💡 Daily Tip</h4>
-                <p style='font-size: 0.9rem;'>{daily_tip}</p>
-            </div>
-        """, unsafe_allow_html=True)
-        
-        # Resources
-        st.markdown("""
-        <h4 style='font-family: "Dancing Script", cursive;'>Additional Resources</h4>
-        """, unsafe_allow_html=True)
-        st.markdown("[North American Menopause Society](https://www.menopause.org/)")
-        st.markdown("[Women's Health Initiative](https://www.whi.org/)")
-        st.markdown("[The Menopause Charity](https://www.themenopausecharity.org/)")
 
-        # Reset button
+         # Reset button
         if st.button("Reset conversation"):
             reset_callback()

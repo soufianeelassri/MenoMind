@@ -3,15 +3,6 @@ MenoMind - Common Data Module
 Contains static data used throughout the application
 """
 
-# Define commonly asked questions
-common_questions = [
-    "What are the common symptoms of menopause?",
-    "How can I manage hot flashes naturally?",
-    "What hormonal changes occur during perimenopause?",
-    "How does menopause affect sleep quality?",
-    "What dietary changes should I consider during menopause?"
-]
-
 # Define menopause stages information
 menopause_stages = {
     "Perimenopause": "The transitional period before menopause that can last 4-8 years. Hormonal fluctuations begin, and periods may become irregular.",

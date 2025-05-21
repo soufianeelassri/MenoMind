@@ -18,7 +18,6 @@ from utils.classifier import needs_retrieval
 from retriever.hybrid_retrieval import hybrid_retrieve
 from styles.css_styles import load_css_styles
 from data.common_data import (
-    common_questions,
     menopause_stages,
     wellness_tips
 )
@@ -73,19 +72,18 @@ def reset_chat():
 render_sidebar(wellness_tips, menopause_stages, reset_chat)
 
 # Create tabs
-tabs = st.tabs(["💬 Chat", "📚 Resources", "📊 Symptom Tracker"])
+tabs = st.tabs(["💬 Chat", "📊 Symptom Tracker", "📚 Information Cards"])
 
 # Render each tab
 with tabs[0]:
     render_chat_tab(
-        common_questions=common_questions,
         resources=resources,
         classify_query=needs_retrieval,
         retrieve_context=hybrid_retrieve
     )
-
+    
 with tabs[1]:
-    render_resources_tab(resource_images=resources["assets"]["resource_images"])
+    render_symptom_tracker_tab()
 
 with tabs[2]:
-    render_symptom_tracker_tab()
+    render_resources_tab(resource_images=resources["assets"]["resource_images"])
